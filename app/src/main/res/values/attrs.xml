@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Letter">
+        <attr name="foundInString" format="boolean" />
+        <attr name="foundPlace" format="boolean" />
+        <attr name="boxLetter" format="string" />
+    </declare-styleable>
+</resources>
