@@ -12,7 +12,8 @@ public class Letter extends View {
 
 	private boolean foundInString;
 	private boolean foundPlace;
-	public String letter;
+	private Paint paint;
+	private String letter;
 
 	public Letter(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -27,6 +28,7 @@ public class Letter extends View {
 		} finally {
 			a.recycle();
 		}
+		paint = new Paint();
 
 	}
 
@@ -39,19 +41,26 @@ public class Letter extends View {
 	}
 
 	@Override
-	protected void onDraw(Canvas canvas) {
-		Paint paint = new Paint();
-		Paint black = new Paint();
-		black.setARGB(255, 0, 0, 0);
+	public void onDraw(Canvas canvas) {
 		if (foundInString) {
 			paint.setARGB(255, 0, 255, 255);
 		}
 		paint.setARGB(255, 122, 122, 122);
 		paint.setStyle(Paint.Style.STROKE);
-		int height = canvas.getHeight();
-		float coordinate = new Float(height);
+		int height = getHeight();
 		canvas.drawRect(new Rect(0, 0, height, height), paint);
-		black.setTextSize(120);
-		canvas.drawText("m", coordinate/2 - 50, coordinate/2 + 40, black);
+		paint.setTextSize(120);
+		paint.setARGB(255, 0, 0, 0);
+		if (letter != null) {
+			canvas.drawText(letter, height/2 - 50, height/2 + 40, paint);
+		}
+	}
+
+	public void setLetter(String lett) {
+		letter = lett;
+	}
+
+	public String getLetter() {
+		return letter;
 	}
 }
