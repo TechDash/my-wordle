@@ -17,17 +17,6 @@ public class Letter extends View {
 
 	public Letter(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		TypedArray a = context.getTheme().obtainStyledAttributes(
-				attrs,
-				R.styleable.Letter,
-				0, 0);
-
-		try {
-			foundInString = a.getBoolean(R.styleable.Letter_foundInString, false);
-			foundPlace = a.getBoolean(R.styleable.Letter_foundPlace, false);
-		} finally {
-			a.recycle();
-		}
 		paint = new Paint();
 
 	}
@@ -45,7 +34,7 @@ public class Letter extends View {
 		if (foundInString) {
 			paint.setARGB(255, 0, 255, 255);
 		}
-		paint.setARGB(255, 122, 122, 122);
+		paint.setARGB(255, 0, 0, 0);
 		paint.setStyle(Paint.Style.STROKE);
 		int height = getHeight();
 		canvas.drawRect(new Rect(0, 0, height, height), paint);
