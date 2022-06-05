@@ -5,34 +5,50 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Random;
 import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity {
 
 	private String letter;
-	private String word;
+	private String answer;
+	private String word = "";
 	private DictionaryBST dict;
 	private boolean firstBoot = true;
 	private ArrayList<String> words;
 	private TreeSet<String> usedWords;
-
+	private ConstraintLayout layout;
+	private int letterCount = 0;
+	private int attempt = 1;
+	private int wordLength = 0;
+	private ArrayList<ConstraintLayout> layouts;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+			case Configuration.UI_MODE_NIGHT_YES:
+        		setContentView(R.layout.activity_main_dark);
+				break;
+			case Configuration.UI_MODE_NIGHT_NO:
+				setContentView(R.layout.activity_main);
+				break;
+		}
+
+		layout = findViewById(R.id.attempt1);
 
 
 		if (savedInstanceState != null) {
@@ -41,24 +57,14 @@ public class MainActivity extends AppCompatActivity {
 			dict = savedInstanceState.getParcelable("dict");
 			word = savedInstanceState.getString("word");
 			words = savedInstanceState.getStringArrayList("words");
+			letterCount = savedInstanceState.getInt("letterCount");
 		}
 		if (firstBoot) {
 			firstBoot = false;
-			System.out.println("mnor");
 			try {
 				getData();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-		}
-		else {
-			ConstraintLayout layout = findViewById(R.id.attempt1);
-			System.out.println(word);
-			for (int i = 0; i < 5; i++) {
-				System.out.println(String.valueOf(word.charAt(i)));
-				Letter currView = (Letter) layout.getChildAt(i);
-				currView.setLetter(String.valueOf(word.charAt(i)));
-				System.out.println(currView.getLetter());
 			}
 		}
 	}
@@ -86,22 +92,122 @@ public class MainActivity extends AppCompatActivity {
 			words.add(st);
 			st = reader.readLine();
 		}
-		word = words.get(new Random().nextInt(words.size())).toUpperCase();
+		answer = words.get(new Random().nextInt(words.size())).toUpperCase();
+	}
 
-		try {
-			File f1 = new File("data/data.com.example.wordlepromax/databases/usedWords.txt");
-
-			FileWriter fileWritter = new FileWriter(f1.getName(),true);
-			BufferedWriter bw = new BufferedWriter(fileWritter);
-			bw.write(word);
-			bw.close();
-			System.out.println("Done");
-		} catch(IOException e){
-			e.printStackTrace();
+	public void set(View view) {
+		if (letterCount < 5) {
+			Button button = (Button) view;
+			switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+				case Configuration.UI_MODE_NIGHT_YES:
+					setContentView(R.layout.activity_main_dark);
+					break;
+				case Configuration.UI_MODE_NIGHT_NO:
+					setContentView(R.layout.activity_main);
+					break;
+			}
+			if (attempt == 1) {
+				layout = findViewById(R.id.attempt1);
+			}
+			if (attempt == 2) {
+				layout = findViewById(R.id.attempt2);
+			}
+			if (attempt == 3) {
+				layout = findViewById(R.id.attempt3);
+			}
+			if (attempt == 4) {
+				layout = findViewById(R.id.attempt4);
+			}
+			if (attempt == 5) {
+				layout = findViewById(R.id.attempt5);
+			}
+			if (attempt == 6) {
+				layout = findViewById(R.id.attempt6);
+			}
+			letter = button.getHint().toString();
+			word += letter;
+			letterCount++;
+			wordLength = word.length() - 1;
+			for (int i = 0; i < letterCount; i++) {
+				TextView currView = (TextView) layout.getChildAt(i);
+				currView.setText(String.valueOf(word.charAt(i)));
+			}
 		}
 	}
 
-	// invoked when the activity may be temporarily destroyed, save the instance state here
+	public void validate(View view) {
+		if (word.length() < 5) {
+			Toast.makeText(this, "Not enough letters", Toast.LENGTH_SHORT).show();
+		}
+		else if (!dict.isWord(word)) {
+			Toast.makeText(this, "Not in word list", Toast.LENGTH_SHORT).show();
+		}
+		else if (dict.isWord(word)) {
+			ArrayList<String> comparison = compareWords(word, answer);
+			for (int i = 0; i < 5; i++) {
+				TextView currView = (TextView) layout.getChildAt(i);
+				if (comparison.get(i).equals("yes")) {
+					currView.setBackgroundColor(Color.GREEN);
+				}
+				if (comparison.get(i).equals("inString")) {
+					currView.setBackgroundColor(Color.YELLOW);
+				}
+			}
+		}
+		if (attempt < 6) {
+			attempt++;
+		}
+		letterCount = 0;
+		word = "";
+	}
+
+	public void delete(View view) {
+		if (attempt == 1) {
+			layout = findViewById(R.id.attempt1);
+		}
+		if (attempt == 2) {
+			layout = findViewById(R.id.attempt2);
+		}
+		if (attempt == 3) {
+			layout = findViewById(R.id.attempt3);
+		}
+		if (attempt == 4) {
+			layout = findViewById(R.id.attempt4);
+		}
+		if (attempt == 5) {
+			layout = findViewById(R.id.attempt5);
+		}
+		if (attempt == 6) {
+			layout = findViewById(R.id.attempt6);
+		}
+		if (word.length() - 1 >= 0) {
+			TextView currView = (TextView) layout.getChildAt(word.length() - 1);
+			currView.setText("");
+			word = word.substring(0, word.length() - 1);
+			letterCount--;
+		}
+	}
+
+	private ArrayList<String> compareWords(String word1, String word2) {
+		ArrayList<String> output = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			output.add("no");
+		}
+		for (int i = 0; i < word1.length(); i++) {
+			if (word1.charAt(i) == word2.charAt(i)) {
+				output.set(i, "yes");
+			}
+			else {
+				for (int j = 0; j < word1.length(); j++) {
+					if (word1.charAt(i) == word2.charAt(j)) {
+						output.set(i, "inString");
+					}
+				}
+			}
+		}
+		return output;
+	}
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// call superclass to save any view hierarchy
@@ -110,11 +216,8 @@ public class MainActivity extends AppCompatActivity {
 		outState.putParcelable("dict", dict);
 		outState.putBoolean("FIRST_BOOT", firstBoot);
 		outState.putStringArrayList("words", words);
+		outState.putInt("letterCount", letterCount);
 		super.onSaveInstanceState(outState);
-	}
-
-	public void testSet(View view) {
-		recreate();
 	}
 
 }

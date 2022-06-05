@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WordleProMax</string>
     <string name="set_letter_test">Set</string>
+    <string name="q">Q</string>
 </resources>
