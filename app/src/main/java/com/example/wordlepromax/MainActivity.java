@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 	private int letterCount = 0;
 	private int attempt = 1;
 	private int wordLength = 0;
-	private ArrayList<ConstraintLayout> layouts;
+	private ArrayList<Button> buttons = new ArrayList<>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		layout = findViewById(R.id.attempt1);
-
 
 		if (savedInstanceState != null) {
 			letter = savedInstanceState.getString("view_Letter");
@@ -98,14 +97,7 @@ public class MainActivity extends AppCompatActivity {
 	public void set(View view) {
 		if (letterCount < 5) {
 			Button button = (Button) view;
-			switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-				case Configuration.UI_MODE_NIGHT_YES:
-					setContentView(R.layout.activity_main_dark);
-					break;
-				case Configuration.UI_MODE_NIGHT_NO:
-					setContentView(R.layout.activity_main);
-					break;
-			}
+			buttons.add(button);
 			if (attempt == 1) {
 				layout = findViewById(R.id.attempt1);
 			}
@@ -136,29 +128,40 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void validate(View view) {
+		if (attempt < 6) {
+			attempt++;
+		}
 		if (word.length() < 5) {
 			Toast.makeText(this, "Not enough letters", Toast.LENGTH_SHORT).show();
+			attempt--;
 		}
 		else if (!dict.isWord(word)) {
 			Toast.makeText(this, "Not in word list", Toast.LENGTH_SHORT).show();
+			attempt--;
+		}
+		else if (attempt == 6) {
+			Toast.makeText(this, answer, Toast.LENGTH_SHORT).show();
 		}
 		else if (dict.isWord(word)) {
 			ArrayList<String> comparison = compareWords(word, answer);
 			for (int i = 0; i < 5; i++) {
 				TextView currView = (TextView) layout.getChildAt(i);
+				Button key = buttons.get(i);
 				if (comparison.get(i).equals("yes")) {
 					currView.setBackgroundColor(Color.GREEN);
+					key.setBackgroundColor(Color.GREEN);
 				}
 				if (comparison.get(i).equals("inString")) {
 					currView.setBackgroundColor(Color.YELLOW);
+					key.setBackgroundColor(Color.YELLOW);
+				}
+				if (comparison.get(i).equals("no")) {
+					key.setBackgroundColor(Color.DKGRAY);
 				}
 			}
+			letterCount = 0;
+			word = "";
 		}
-		if (attempt < 6) {
-			attempt++;
-		}
-		letterCount = 0;
-		word = "";
 	}
 
 	public void delete(View view) {
