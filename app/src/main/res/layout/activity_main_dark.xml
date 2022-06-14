@@ -646,6 +646,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/q"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
@@ -653,7 +654,7 @@
             android:hint="Q"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/w"
@@ -663,6 +664,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/w"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -670,7 +672,7 @@
             android:hint="W"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/e"
@@ -680,6 +682,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/e"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -687,7 +690,7 @@
             android:hint="E"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/r"
@@ -697,6 +700,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/r"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -704,7 +708,7 @@
             android:hint="R"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/t"
@@ -714,6 +718,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/t"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -721,7 +726,7 @@
             android:hint="T"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/y"
@@ -731,6 +736,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/y"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -738,7 +744,7 @@
             android:hint="Y"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/u"
@@ -748,6 +754,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/u"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -755,7 +762,7 @@
             android:hint="U"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/i"
@@ -765,6 +772,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/i"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -772,7 +780,7 @@
             android:hint="I"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/o"
@@ -782,6 +790,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/o"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -789,7 +798,7 @@
             android:hint="O"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/p"
@@ -799,6 +808,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/p"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -806,7 +816,7 @@
             android:hint="P"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -830,6 +840,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/z"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -837,7 +848,7 @@
             android:hint="Z"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/x"
@@ -847,6 +858,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/x"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -854,7 +866,7 @@
             android:hint="X"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/c"
@@ -864,6 +876,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/c"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -871,7 +884,7 @@
             android:hint="C"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/v"
@@ -881,6 +894,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/v"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -888,7 +902,7 @@
             android:hint="V"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/b"
@@ -898,6 +912,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/b"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -905,7 +920,7 @@
             android:hint="B"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/n"
@@ -915,6 +930,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/n"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -922,7 +938,7 @@
             android:hint="N"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/m"
@@ -932,6 +948,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/m"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -939,7 +956,7 @@
             android:hint="M"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView"
@@ -954,9 +971,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="4dp"
             android:hint="ENTER"
-            android:onClick="set"
+            android:onClick="validate"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio=""
@@ -968,7 +985,7 @@
             android:id="@+id/imageView"
             android:layout_width="61dp"
             android:layout_height="0dp"
-
+            android:onClick="delete"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/keys_normal"
@@ -994,6 +1011,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/a"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="32dp"
@@ -1001,7 +1019,7 @@
             android:hint="A"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/s"
@@ -1011,6 +1029,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/s"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -1018,7 +1037,7 @@
             android:hint="S"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/d"
@@ -1028,6 +1047,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/d"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -1035,7 +1055,7 @@
             android:hint="D"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/f"
@@ -1045,6 +1065,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/f"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -1052,7 +1073,7 @@
             android:hint="F"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/g"
@@ -1062,6 +1083,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/g"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -1069,7 +1091,7 @@
             android:hint="G"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/h"
@@ -1079,6 +1101,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/h"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -1086,7 +1109,7 @@
             android:hint="H"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/j"
@@ -1096,6 +1119,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/j"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -1103,7 +1127,7 @@
             android:hint="J"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/k"
@@ -1113,6 +1137,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/k"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -1120,7 +1145,7 @@
             android:hint="K"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/l"
@@ -1130,6 +1155,7 @@
 
         <com.example.wordlepromax.Key
             android:id="@+id/l"
+            android:tag="false"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
@@ -1137,7 +1163,7 @@
             android:hint="L"
             android:onClick="set"
             android:padding="5dp"
-            android:textColorHint="#000000"
+            android:textColorHint="@color/white"
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

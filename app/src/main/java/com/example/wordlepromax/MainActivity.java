@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.TreeSet;
 
@@ -35,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
 	private int attempt = 1;
 	private int wordLength = 0;
 	private ArrayList<Button> buttons = new ArrayList<>();
-	
+	private boolean notFound = true;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -91,11 +93,12 @@ public class MainActivity extends AppCompatActivity {
 			words.add(st);
 			st = reader.readLine();
 		}
-		answer = words.get(new Random().nextInt(words.size())).toUpperCase();
-	}
+		//answer = words.get(new Random().nextInt(words.size())).toUpperCase();
+		answer = "ENDUE";
+		}
 
 	public void set(View view) {
-		if (letterCount < 5) {
+		if (letterCount < 5 && attempt <= 6 && notFound) {
 			Button button = (Button) view;
 			buttons.add(button);
 			if (attempt == 1) {
@@ -128,9 +131,9 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void validate(View view) {
-		if (attempt < 6) {
-			attempt++;
-		}
+		boolean found = false;
+		int[] foundLetters = new int[5];
+		attempt++;
 		if (word.length() < 5) {
 			Toast.makeText(this, "Not enough letters", Toast.LENGTH_SHORT).show();
 			attempt--;
@@ -139,26 +142,40 @@ public class MainActivity extends AppCompatActivity {
 			Toast.makeText(this, "Not in word list", Toast.LENGTH_SHORT).show();
 			attempt--;
 		}
-		else if (attempt == 6) {
-			Toast.makeText(this, answer, Toast.LENGTH_SHORT).show();
-		}
 		else if (dict.isWord(word)) {
 			ArrayList<String> comparison = compareWords(word, answer);
 			for (int i = 0; i < 5; i++) {
 				TextView currView = (TextView) layout.getChildAt(i);
 				Button key = buttons.get(i);
+
 				if (comparison.get(i).equals("yes")) {
-					currView.setBackgroundColor(Color.GREEN);
-					key.setBackgroundColor(Color.GREEN);
+					currView.setBackgroundColor(Color.parseColor("#3EBF44"));
+					key.setBackgroundResource(R.drawable.in_place);
+					currView.setTextColor(Color.WHITE);
+					key.setHintTextColor(Color.WHITE);
+					key.setTag("true");
 				}
 				if (comparison.get(i).equals("inString")) {
-					currView.setBackgroundColor(Color.YELLOW);
-					key.setBackgroundColor(Color.YELLOW);
+					currView.setBackgroundColor(Color.parseColor("#E1CB07"));
+					currView.setTextColor(Color.WHITE);
+					if (!Boolean.parseBoolean((String) key.getTag())) {
+						key.setBackgroundResource(R.drawable.in_word);
+						key.setHintTextColor(Color.WHITE);
+					}
 				}
 				if (comparison.get(i).equals("no")) {
-					key.setBackgroundColor(Color.DKGRAY);
+					currView.setBackgroundColor(Color.parseColor("#474747"));
+					currView.setTextColor(Color.WHITE);
+					if (!Boolean.parseBoolean((String) key.getTag())) {
+						key.setBackgroundResource(R.drawable.not_in_word);
+						key.setHintTextColor(Color.WHITE);
+					}
 				}
 			}
+			if (word.equals(answer)) {
+				notFound = false;
+			}
+			buttons.clear();
 			letterCount = 0;
 			word = "";
 		}
@@ -187,26 +204,62 @@ public class MainActivity extends AppCompatActivity {
 			TextView currView = (TextView) layout.getChildAt(word.length() - 1);
 			currView.setText("");
 			word = word.substring(0, word.length() - 1);
+			buttons.remove(buttons.size()-1);
 			letterCount--;
 		}
 	}
 
 	private ArrayList<String> compareWords(String word1, String word2) {
 		ArrayList<String> output = new ArrayList<>();
+		ArrayList<String> seen = new ArrayList<>();
+		HashMap<String, ArrayList<Integer>> occ = occurrences(word1, word2);
 		for (int i = 0; i < 5; i++) {
 			output.add("no");
 		}
+
 		for (int i = 0; i < word1.length(); i++) {
-			if (word1.charAt(i) == word2.charAt(i)) {
-				output.set(i, "yes");
-			}
-			else {
-				for (int j = 0; j < word1.length(); j++) {
-					if (word1.charAt(i) == word2.charAt(j)) {
-						output.set(i, "inString");
+			String currLetter = String.valueOf(word1.charAt(i));
+			ArrayList<Integer> letterOcc = occ.get(currLetter);
+			if (!seen.contains(currLetter)) {
+				if (letterOcc != null) {
+					if (letterOcc.size() < 2) {
+						seen.add(currLetter);
+					}
+					for (Integer pos : letterOcc) {
+						if (i == pos) {
+							output.set(i, "yes");
+							break;
+						} else {
+							output.set(i, "inString");
+						}
 					}
 				}
 			}
+		}
+		return output;
+	}
+
+	private HashMap<String, ArrayList<Integer>> occurrences(String word1, String word2) {
+		HashMap<String, ArrayList<Integer>> output = new HashMap<>();
+		for (int i = 0; i < word1.length(); i++) {
+			for (int j = 0; j < word1.length(); j++) {
+				if (word1.charAt(i) == word2.charAt(j)) {
+					if (output.containsKey(String.valueOf(word1.charAt(i)))) {
+						ArrayList<Integer> occ = output.get(String.valueOf(word1.charAt(i)));
+						assert occ != null;
+						if (occ.get(occ.size()-1) < j) {
+							occ.add(j);
+							output.put(String.valueOf(word1.charAt(i)), occ);
+						}
+					}
+					else {
+						ArrayList<Integer> occ = new ArrayList<>();
+						occ.add(j);
+						output.put(String.valueOf(word1.charAt(i)), occ);
+					}
+				}
+			}
+
 		}
 		return output;
 	}
