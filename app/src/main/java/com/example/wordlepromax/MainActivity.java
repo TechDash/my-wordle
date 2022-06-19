@@ -1,15 +1,22 @@
 package com.example.wordlepromax;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +27,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.TreeSet;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,13 +36,13 @@ public class MainActivity extends AppCompatActivity {
 	private DictionaryBST dict;
 	private boolean firstBoot = true;
 	private ArrayList<String> words;
-	private TreeSet<String> usedWords;
 	private ConstraintLayout layout;
 	private int letterCount = 0;
 	private int attempt = 1;
-	private int wordLength = 0;
 	private ArrayList<Button> buttons = new ArrayList<>();
 	private boolean notFound = true;
+	private DataHandler db;
+	boolean click = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +59,14 @@ public class MainActivity extends AppCompatActivity {
 		layout = findViewById(R.id.attempt1);
 
 		if (savedInstanceState != null) {
-			letter = savedInstanceState.getString("view_Letter");
+			//letter = savedInstanceState.getString("view_Letter");
 			firstBoot = savedInstanceState.getBoolean("FIRST_BOOT");
 			dict = savedInstanceState.getParcelable("dict");
-			word = savedInstanceState.getString("word");
+			//word = savedInstanceState.getString("word");
 			words = savedInstanceState.getStringArrayList("words");
-			letterCount = savedInstanceState.getInt("letterCount");
+			//letterCount = savedInstanceState.getInt("letterCount");
+			//answer = words.get(new Random().nextInt(words.size())).toUpperCase();
+			answer = "WALLS";
 		}
 		if (firstBoot) {
 			firstBoot = false;
@@ -71,16 +79,13 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void getData() throws IOException {
-		/*DataHandler db = new DataHandler(MainActivity.this);
+		/*DataHandler db = new DataHandler(this);
 		dict = db.readDict();
 		Random random = new Random();
 		words = db.readWords();
 		System.out.println(dict.size());
-		usedWords = db.readUsedWords();
-		do {
-			word = words.get(random.nextInt(words.size()));
-		} while(usedWords.contains(word));
-		db.addUsedWord(word);*/
+		answer = words.get(random.nextInt(words.size()));*/
+
 		Context context = this;
 		AssetManager am = context.getAssets();
 		InputStream im = am.open("words.txt");
@@ -93,8 +98,11 @@ public class MainActivity extends AppCompatActivity {
 			words.add(st);
 			st = reader.readLine();
 		}
+		db = new DataHandler(this);
+		db.updateGameData(true);
+		System.out.println(db.getDat());
 		//answer = words.get(new Random().nextInt(words.size())).toUpperCase();
-		answer = "ENDUE";
+		answer = "WALLS";
 		}
 
 	public void set(View view) {
@@ -122,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
 			letter = button.getHint().toString();
 			word += letter;
 			letterCount++;
-			wordLength = word.length() - 1;
 			for (int i = 0; i < letterCount; i++) {
 				TextView currView = (TextView) layout.getChildAt(i);
 				currView.setText(String.valueOf(word.charAt(i)));
@@ -131,10 +138,11 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void validate(View view) {
-		boolean found = false;
-		int[] foundLetters = new int[5];
 		attempt++;
-		if (word.length() < 5) {
+		if (attempt > 6) {
+			return;
+		}
+		else if (word.length() < 5 && notFound) {
 			Toast.makeText(this, "Not enough letters", Toast.LENGTH_SHORT).show();
 			attempt--;
 		}
@@ -161,19 +169,29 @@ public class MainActivity extends AppCompatActivity {
 					if (!Boolean.parseBoolean((String) key.getTag())) {
 						key.setBackgroundResource(R.drawable.in_word);
 						key.setHintTextColor(Color.WHITE);
+						key.setTag("yellow");
 					}
 				}
 				if (comparison.get(i).equals("no")) {
 					currView.setBackgroundColor(Color.parseColor("#474747"));
 					currView.setTextColor(Color.WHITE);
-					if (!Boolean.parseBoolean((String) key.getTag())) {
+					String tag = (String) key.getTag();
+					if (!Boolean.parseBoolean(tag) && !tag.equals("yellow")) {
 						key.setBackgroundResource(R.drawable.not_in_word);
 						key.setHintTextColor(Color.WHITE);
 					}
 				}
 			}
+			if (!word.equals(answer) && attempt == 7) {
+				Toast.makeText(this, answer, Toast.LENGTH_SHORT).show();
+			}
 			if (word.equals(answer)) {
 				notFound = false;
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				final View popUp = getLayoutInflater().inflate(R.layout.play_again, null);
+				builder.setView(popUp);
+				AlertDialog builderC = builder.create();
+				builderC.show();
 			}
 			buttons.clear();
 			letterCount = 0;
@@ -264,6 +282,10 @@ public class MainActivity extends AppCompatActivity {
 		return output;
 	}
 
+	public void playAgain(View view) {
+		recreate();
+	}
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// call superclass to save any view hierarchy
@@ -273,6 +295,7 @@ public class MainActivity extends AppCompatActivity {
 		outState.putBoolean("FIRST_BOOT", firstBoot);
 		outState.putStringArrayList("words", words);
 		outState.putInt("letterCount", letterCount);
+		outState.p
 		super.onSaveInstanceState(outState);
 	}
 
