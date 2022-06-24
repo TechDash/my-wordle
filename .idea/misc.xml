@@ -18,8 +18,8 @@
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/activity_main_dark.xml" value="0.2" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/keyboard_preview.xml" value="0.1" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/keyboard_view.xml" value="0.15789473684210525" />
-        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/play_again.xml" value="0.176" />
-        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/play_again_popup.xml" value="0.18671875" />
+        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/play_again.xml" value="0.15789473684210525" />
+        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/play_again_popup.xml" value="0.16" />
       </map>
     </option>
   </component>
@@ -28,5 +28,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.15789473684210525" />
+      </ProjectState>
+    </option>
   </component>
 </project>

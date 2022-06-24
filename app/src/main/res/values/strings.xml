@@ -1,6 +1,11 @@
 <resources>
-    <string name="app_name">WordleProMax</string>
+    <string name="app_name">Get The Word</string>
     <string name="set_letter_test">Set</string>
     <string name="q">Q</string>
     <string name="play_again">PLAY AGAIN</string>
+    <string name="played">Played</string>
+    <string name="maxStreak">Max Streak</string>
+    <string name="currStreak">Current Streak</string>
+    <string name="winPercent">Win %</string>
+    <string name="stat">Statistics</string>
 </resources>

@@ -7,16 +7,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +24,6 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-	private String letter;
 	private String answer;
 	private String word = "";
 	private DictionaryBST dict;
@@ -42,19 +35,13 @@ public class MainActivity extends AppCompatActivity {
 	private ArrayList<Button> buttons = new ArrayList<>();
 	private boolean notFound = true;
 	private DataHandler db;
-	boolean click = true;
+	private AlertDialog builderC;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-			case Configuration.UI_MODE_NIGHT_YES:
-        		setContentView(R.layout.activity_main_dark);
-				break;
-			case Configuration.UI_MODE_NIGHT_NO:
-				setContentView(R.layout.activity_main);
-				break;
-		}
+		pickTheme();
+		db = new DataHandler(this);
 
 		layout = findViewById(R.id.attempt1);
 
@@ -66,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 			words = savedInstanceState.getStringArrayList("words");
 			//letterCount = savedInstanceState.getInt("letterCount");
 			//answer = words.get(new Random().nextInt(words.size())).toUpperCase();
-			answer = "WALLS";
+			answer = "ASSET";
 		}
 		if (firstBoot) {
 			firstBoot = false;
@@ -78,14 +65,18 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	public void getData() throws IOException {
-		/*DataHandler db = new DataHandler(this);
-		dict = db.readDict();
-		Random random = new Random();
-		words = db.readWords();
-		System.out.println(dict.size());
-		answer = words.get(random.nextInt(words.size()));*/
+	private void pickTheme() {
+		switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+			case Configuration.UI_MODE_NIGHT_YES:
+				setContentView(R.layout.activity_main_dark);
+				break;
+			case Configuration.UI_MODE_NIGHT_NO:
+				setContentView(R.layout.activity_main);
+				break;
+		}
+	}
 
+	public void getData() throws IOException {
 		Context context = this;
 		AssetManager am = context.getAssets();
 		InputStream im = am.open("words.txt");
@@ -98,11 +89,8 @@ public class MainActivity extends AppCompatActivity {
 			words.add(st);
 			st = reader.readLine();
 		}
-		db = new DataHandler(this);
-		db.updateGameData(true);
-		System.out.println(db.getDat());
 		//answer = words.get(new Random().nextInt(words.size())).toUpperCase();
-		answer = "WALLS";
+		answer = "ASSET";
 		}
 
 	public void set(View view) {
@@ -127,8 +115,7 @@ public class MainActivity extends AppCompatActivity {
 			if (attempt == 6) {
 				layout = findViewById(R.id.attempt6);
 			}
-			letter = button.getHint().toString();
-			word += letter;
+			word += button.getHint().toString();
 			letterCount++;
 			for (int i = 0; i < letterCount; i++) {
 				TextView currView = (TextView) layout.getChildAt(i);
@@ -139,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
 	public void validate(View view) {
 		attempt++;
-		if (attempt > 6) {
+		if (attempt > 7) {
 			return;
 		}
 		else if (word.length() < 5 && notFound) {
@@ -184,19 +171,52 @@ public class MainActivity extends AppCompatActivity {
 			}
 			if (!word.equals(answer) && attempt == 7) {
 				Toast.makeText(this, answer, Toast.LENGTH_SHORT).show();
+				db.updateGameData(false, attempt - 1);
+				popUp();
 			}
 			if (word.equals(answer)) {
 				notFound = false;
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				final View popUp = getLayoutInflater().inflate(R.layout.play_again, null);
-				builder.setView(popUp);
-				AlertDialog builderC = builder.create();
-				builderC.show();
+				db.updateGameData(true, attempt - 1);
+				popUp();
 			}
 			buttons.clear();
 			letterCount = 0;
 			word = "";
 		}
+	}
+
+	private void popUp() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final View popUp = getLayoutInflater().inflate(R.layout.play_again, null);
+		TextView played = (TextView) popUp.findViewById(R.id.playedNum);
+		TextView winPercent = (TextView) popUp.findViewById(R.id.winPercentageNum);
+		TextView maxStreak = (TextView) popUp.findViewById(R.id.maxStreakNum);
+		TextView currStreak = (TextView) popUp.findViewById(R.id.currStreakNum);
+		HashMap<String, Integer> data = db.getData();
+		float percentage = ((float)data.get("won") / (float) data.get("played")) * 100;
+
+		switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+			case Configuration.UI_MODE_NIGHT_YES:
+				played.setTextColor(Color.WHITE);
+				winPercent.setTextColor(Color.WHITE);
+				maxStreak.setTextColor(Color.WHITE);
+				currStreak.setTextColor(Color.WHITE);
+				break;
+			case Configuration.UI_MODE_NIGHT_NO:
+				played.setTextColor(Color.BLACK);
+				winPercent.setTextColor(Color.BLACK);
+				maxStreak.setTextColor(Color.BLACK);
+				currStreak.setTextColor(Color.BLACK);
+				break;
+		}
+
+		played.setText(String.valueOf(data.get("played")));
+		winPercent.setText(String.valueOf((int)percentage));
+		maxStreak.setText(String.valueOf(data.get("maxStreak")));
+		currStreak.setText(String.valueOf(data.get("currStreak")));
+		builder.setView(popUp);
+		builderC = builder.create();
+		builderC.show();
 	}
 
 	public void delete(View view) {
@@ -229,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private ArrayList<String> compareWords(String word1, String word2) {
 		ArrayList<String> output = new ArrayList<>();
-		ArrayList<String> seen = new ArrayList<>();
+		ArrayList<String> seenOnce = new ArrayList<>();
 		HashMap<String, ArrayList<Integer>> occ = occurrences(word1, word2);
 		for (int i = 0; i < 5; i++) {
 			output.add("no");
@@ -238,17 +258,23 @@ public class MainActivity extends AppCompatActivity {
 		for (int i = 0; i < word1.length(); i++) {
 			String currLetter = String.valueOf(word1.charAt(i));
 			ArrayList<Integer> letterOcc = occ.get(currLetter);
-			if (!seen.contains(currLetter)) {
+			if (!seenOnce.contains(currLetter)) {
 				if (letterOcc != null) {
 					if (letterOcc.size() < 2) {
-						seen.add(currLetter);
+						seenOnce.add(currLetter);
 					}
-					for (Integer pos : letterOcc) {
+					for (int j = 0; j < letterOcc.size(); j++) {
+						int pos = letterOcc.get(j);
 						if (i == pos) {
 							output.set(i, "yes");
-							break;
-						} else {
+							letterOcc.remove(j);
+							occ.put(currLetter, letterOcc);
+							//break;
+						}
+						else if (output.get(i).equals("no")){
 							output.set(i, "inString");
+							letterOcc.remove(j);
+							occ.put(currLetter, letterOcc);
 						}
 					}
 				}
@@ -283,19 +309,24 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void playAgain(View view) {
-		recreate();
+		builderC.cancel();
+		pickTheme();
+		word = "";
+		answer = "ASSET";
+		notFound = true;
+		attempt = 1;
+		buttons.clear();
+		letterCount = 0;
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// call superclass to save any view hierarchy
-		outState.putString("view_Letter", letter);
 		outState.putString("word", word);
 		outState.putParcelable("dict", dict);
 		outState.putBoolean("FIRST_BOOT", firstBoot);
 		outState.putStringArrayList("words", words);
 		outState.putInt("letterCount", letterCount);
-		outState.p
 		super.onSaveInstanceState(outState);
 	}
 
