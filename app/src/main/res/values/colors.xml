@@ -10,4 +10,6 @@
     <color name="pastel_red">#EB3F3F</color>
     <color name="gray">#A1A1A1</color>
     <color name="light_gray">#C3C3C3</color>
+    <color name="app_green">#3EBF44</color>
+    <color name="dark_gray">#474747</color>
 </resources>

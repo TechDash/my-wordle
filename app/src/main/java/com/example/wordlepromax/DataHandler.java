@@ -2,31 +2,19 @@ package com.example.wordlepromax;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DataHandler extends SQLiteOpenHelper {
-	private SQLiteDatabase myDataBase;
-	private final Context myContext;
 	private static final String DATABASE_NAME = "game_data.sqlite";
-	public final static String DATABASE_PATH = "/data/data/com.example.wordlepromax/databases/";
 	public static final int DATABASE_VERSION = 1;
-	private static final String WORDS_TABLE = "Words";
-	private static final String NAME_COL = "words";
 	private static final String GAME_DAT = "Game_dat";
 
 	public DataHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		this.myContext = context;
 	}
 
 	@Override
@@ -127,50 +115,4 @@ public class DataHandler extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + GAME_DAT);
 		db.execSQL("DROP TABLE IF EXISTS win_attempt");
 	}
-
-	public DictionaryBST readDict() {
-		DictionaryBST dict = new DictionaryBST();
-		Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + WORDS_TABLE, null);
-		if (cursor.moveToFirst()) {
-			do {
-				dict.addWord(cursor.getString(0));
-			}while (cursor.moveToNext());
-		}
-		cursor.close();
-		return dict;
-	}
-
-	public ArrayList<String> readWords() {
-		ArrayList<String> dict = new ArrayList<String>();
-		Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + WORDS_TABLE, null);
-		cursor.moveToFirst();
-		System.out.println("Before if");
-		//if (cursor.moveToFirst()) {
-		//System.out.println("If block");
-		do {
-			System.out.println(cursor.getString(0));
-			dict.add(cursor.getString(0));
-		}while (cursor.moveToNext());
-		//}
-		cursor.close();
-		return dict;
-	}
-
-	private void addWords(SQLiteDatabase db) throws IOException {
-		AssetManager am = myContext.getAssets();
-		InputStream im = am.open("words.txt");
-		BufferedReader reader = new BufferedReader(new InputStreamReader(im));
-		String st = reader.readLine();
-		ContentValues values = new ContentValues();
-		int lines = 0;
-		while (st != null) {
-			lines++;
-			System.out.println(lines);
-			System.out.println(st);
-			values.put(NAME_COL, st);
-			st = reader.readLine();
-			db.insert(WORDS_TABLE, null, values);
-		}
-	}
-
 }

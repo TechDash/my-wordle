@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/drawable-anydpi/howTo.xml" value="0.208" />
+        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/drawable-anydpi/ic_action_name.xml" value="0.2385" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.248" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/drawable/fresh.xml" value="0.2555" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/drawable/ic_launcher_background.xml" value="0.248" />
@@ -14,12 +16,15 @@
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/drawable/states.xml" value="0.1875" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/drawable/tiles_dark.xml" value="0.1315" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/drawable/tiles_normal.xml" value="0.2555" />
-        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/activity_main.xml" value="0.15789473684210525" />
+        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/activity_main_dark.xml" value="0.2" />
+        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/how_to_play.xml" value="0.1" />
+        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/how_to_play_dark.xml" value="0.15723684210526315" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/keyboard_preview.xml" value="0.1" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/keyboard_view.xml" value="0.15789473684210525" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/play_again.xml" value="0.15789473684210525" />
         <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/layout/play_again_popup.xml" value="0.16" />
+        <entry key="..\:/Users/balas/AndroidStudioProjects/WordleProMax/app/src/main/res/menu/menu.xml" value="0.15789473684210525" />
       </map>
     </option>
   </component>
@@ -32,7 +37,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.15789473684210525" />
+        <option name="scale" value="0.264" />
       </ProjectState>
     </option>
   </component>

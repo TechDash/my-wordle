@@ -2,17 +2,28 @@ package com.example.wordlepromax;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -41,17 +52,16 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		pickTheme();
+		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		setSupportActionBar(myToolbar);
 		db = new DataHandler(this);
 
 		layout = findViewById(R.id.attempt1);
 
 		if (savedInstanceState != null) {
-			//letter = savedInstanceState.getString("view_Letter");
 			firstBoot = savedInstanceState.getBoolean("FIRST_BOOT");
 			dict = savedInstanceState.getParcelable("dict");
-			//word = savedInstanceState.getString("word");
 			words = savedInstanceState.getStringArrayList("words");
-			//letterCount = savedInstanceState.getInt("letterCount");
 			//answer = words.get(new Random().nextInt(words.size())).toUpperCase();
 			answer = "ASSET";
 		}
@@ -124,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	public void validate(View view) {
+	public void validate(View view) throws InterruptedException {
 		attempt++;
 		if (attempt > 7) {
 			return;
@@ -144,6 +154,9 @@ public class MainActivity extends AppCompatActivity {
 				Button key = buttons.get(i);
 
 				if (comparison.get(i).equals("yes")) {
+					for (int j = 1; j <= 360; j++) {
+						currView.setRotationX(j);
+					}
 					currView.setBackgroundColor(Color.parseColor("#3EBF44"));
 					key.setBackgroundResource(R.drawable.in_place);
 					currView.setTextColor(Color.WHITE);
@@ -186,14 +199,22 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void popUp() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		final View popUp = getLayoutInflater().inflate(R.layout.play_again, null);
-		TextView played = (TextView) popUp.findViewById(R.id.playedNum);
-		TextView winPercent = (TextView) popUp.findViewById(R.id.winPercentageNum);
-		TextView maxStreak = (TextView) popUp.findViewById(R.id.maxStreakNum);
-		TextView currStreak = (TextView) popUp.findViewById(R.id.currStreakNum);
 		HashMap<String, Integer> data = db.getData();
 		float percentage = ((float)data.get("won") / (float) data.get("played")) * 100;
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final View popUp = getLayoutInflater().inflate(R.layout.play_again, null);
+
+		TextView played = popUp.findViewById(R.id.playedNum);
+		TextView winPercent = popUp.findViewById(R.id.winPercentageNum);
+		TextView maxStreak = popUp.findViewById(R.id.maxStreakNum);
+		TextView currStreak = popUp.findViewById(R.id.currStreakNum);
+		TextView playedTitle = popUp.findViewById(R.id.played);
+		TextView winPercentTitle = popUp.findViewById(R.id.winPercentage);
+		TextView maxStreakTitle = popUp.findViewById(R.id.maxStreak);
+		TextView currStreakTitle = popUp.findViewById(R.id.currStreak);
+		TextView stat = popUp.findViewById(R.id.stat);
+		TextView guess = popUp.findViewById(R.id.guess);
 
 		switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
 			case Configuration.UI_MODE_NIGHT_YES:
@@ -201,12 +222,24 @@ public class MainActivity extends AppCompatActivity {
 				winPercent.setTextColor(Color.WHITE);
 				maxStreak.setTextColor(Color.WHITE);
 				currStreak.setTextColor(Color.WHITE);
+				playedTitle.setTextColor(Color.WHITE);
+				winPercentTitle.setTextColor(Color.WHITE);
+				maxStreakTitle.setTextColor(Color.WHITE);
+				currStreakTitle.setTextColor(Color.WHITE);
+				stat.setTextColor(Color.WHITE);
+				guess.setTextColor(Color.WHITE);
 				break;
 			case Configuration.UI_MODE_NIGHT_NO:
 				played.setTextColor(Color.BLACK);
 				winPercent.setTextColor(Color.BLACK);
 				maxStreak.setTextColor(Color.BLACK);
 				currStreak.setTextColor(Color.BLACK);
+				playedTitle.setTextColor(Color.BLACK);
+				winPercentTitle.setTextColor(Color.BLACK);
+				maxStreakTitle.setTextColor(Color.BLACK);
+				currStreakTitle.setTextColor(Color.BLACK);
+				stat.setTextColor(Color.BLACK);
+				guess.setTextColor(Color.BLACK);
 				break;
 		}
 
@@ -214,9 +247,54 @@ public class MainActivity extends AppCompatActivity {
 		winPercent.setText(String.valueOf((int)percentage));
 		maxStreak.setText(String.valueOf(data.get("maxStreak")));
 		currStreak.setText(String.valueOf(data.get("currStreak")));
+
+		HorizontalBarChart chart = popUp.findViewById(R.id.idBarChart);
+		BarDataSet dataSet = new BarDataSet(getBarEntries(data), null);
+		BarData barData = new BarData(dataSet);
+		chart.setData(barData);
+		dataSet.setColors(ContextCompat.getColor(this, R.color.app_green));
+
+		// setting text color.
+		dataSet.setValueTextColor(Color.BLACK);
+
+		ValueFormatter vf = new ValueFormatter() {
+			@Override
+			public String getFormattedValue(float value) {
+				return String.valueOf((int) value);
+			}
+		};
+		dataSet.setValueFormatter(vf);
+		dataSet.setValueTextSize(15);
+
+		chart.getXAxis().setTextSize(15);
+		chart.getDescription().setEnabled(false);
+		chart.getXAxis().setDrawGridLines(false);
+		chart.getAxisLeft().setDrawGridLines(false);
+		chart.getAxisRight().setDrawGridLines(false);
+		chart.getAxisRight().setEnabled(false);
+		chart.getAxisLeft().setDrawLabels(false);
+		chart.getLegend().setEnabled(false);
+
 		builder.setView(popUp);
 		builderC = builder.create();
 		builderC.show();
+	}
+
+	private ArrayList<BarEntry> getBarEntries(HashMap<String, Integer> map) {
+		ArrayList<BarEntry> entries = new ArrayList<>();
+		int one = map.get("one");
+		int two = map.get("two");
+		int three = map.get("three");
+		int four = map.get("four");
+		int five = map.get("five");
+		int six = map.get("six");
+		entries.add(new BarEntry(1, one));
+		entries.add(new BarEntry(2, two));
+		entries.add(new BarEntry(3, three));
+		entries.add(new BarEntry(4, four));
+		entries.add(new BarEntry(5, five));
+		entries.add(new BarEntry(6, six));
+		return entries;
 	}
 
 	public void delete(View view) {
@@ -309,14 +387,10 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void playAgain(View view) {
-		builderC.cancel();
-		pickTheme();
-		word = "";
-		answer = "ASSET";
-		notFound = true;
-		attempt = 1;
-		buttons.clear();
-		letterCount = 0;
+		if (!notFound) {
+			builderC.cancel();
+			recreate();
+		}
 	}
 
 	@Override
@@ -326,8 +400,24 @@ public class MainActivity extends AppCompatActivity {
 		outState.putParcelable("dict", dict);
 		outState.putBoolean("FIRST_BOOT", firstBoot);
 		outState.putStringArrayList("words", words);
-		outState.putInt("letterCount", letterCount);
 		super.onSaveInstanceState(outState);
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.howtoPlay) {
+			Intent intent = new Intent(this, HowToPlay.class);
+			startActivity(intent);
+		}
+		if (item.getItemId() == R.id.stats) {
+			popUp();
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }
