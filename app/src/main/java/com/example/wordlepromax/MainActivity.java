@@ -6,6 +6,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -32,6 +35,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -149,14 +153,16 @@ public class MainActivity extends AppCompatActivity {
 		}
 		else if (dict.isWord(word)) {
 			ArrayList<String> comparison = compareWords(word, answer);
+			float scale = getResources().getDisplayMetrics().density;
 			for (int i = 0; i < 5; i++) {
 				TextView currView = (TextView) layout.getChildAt(i);
 				Button key = buttons.get(i);
+				currView.setCameraDistance(scale * 8000);
+				AnimatorSet anim = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.flip_tile);
+				anim.setTarget(currView);
+				anim.start();
 
 				if (comparison.get(i).equals("yes")) {
-					for (int j = 1; j <= 360; j++) {
-						currView.setRotationX(j);
-					}
 					currView.setBackgroundColor(Color.parseColor("#3EBF44"));
 					key.setBackgroundResource(R.drawable.in_place);
 					currView.setTextColor(Color.WHITE);
@@ -188,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
 				popUp();
 			}
 			if (word.equals(answer)) {
+				complement();
 				notFound = false;
 				db.updateGameData(true, attempt - 1);
 				popUp();
@@ -195,6 +202,27 @@ public class MainActivity extends AppCompatActivity {
 			buttons.clear();
 			letterCount = 0;
 			word = "";
+		}
+	}
+
+	private void complement() {
+		if (attempt - 1 == 1) {
+			Toast.makeText(this, "Smart", Toast.LENGTH_SHORT).show();
+		}
+		if (attempt - 1 == 2) {
+			Toast.makeText(this, "Brilliant", Toast.LENGTH_SHORT).show();
+		}
+		if (attempt - 1 == 3) {
+			Toast.makeText(this, "Awesome", Toast.LENGTH_SHORT).show();
+		}
+		if (attempt - 1 == 4) {
+			Toast.makeText(this, "Bravo", Toast.LENGTH_SHORT).show();
+		}
+		if (attempt - 1 == 5) {
+			Toast.makeText(this, "Good", Toast.LENGTH_SHORT).show();
+		}
+		if (attempt - 1 == 6) {
+			Toast.makeText(this, "So close", Toast.LENGTH_SHORT).show();
 		}
 	}
 
