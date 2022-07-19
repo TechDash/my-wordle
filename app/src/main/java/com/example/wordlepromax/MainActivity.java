@@ -6,7 +6,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
-import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.content.Context;
@@ -14,6 +13,8 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +36,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
 			firstBoot = savedInstanceState.getBoolean("FIRST_BOOT");
 			dict = savedInstanceState.getParcelable("dict");
 			words = savedInstanceState.getStringArrayList("words");
-			//answer = words.get(new Random().nextInt(words.size())).toUpperCase();
-			answer = "ASSET";
+			answer = words.get(new Random().nextInt(words.size())).toUpperCase();
+			//answer = "ASSET";
 		}
 		if (firstBoot) {
 			firstBoot = false;
@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
 			words.add(st);
 			st = reader.readLine();
 		}
-		//answer = words.get(new Random().nextInt(words.size())).toUpperCase();
-		answer = "ASSET";
+		answer = words.get(new Random().nextInt(words.size())).toUpperCase();
+		//answer = "ASSET";
 		}
 
 	public void set(View view) {
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
 				}
 			}
 			if (!word.equals(answer) && attempt == 7) {
-				Toast.makeText(this, answer, Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, answer, Toast.LENGTH_LONG).show();
 				db.updateGameData(false, attempt - 1);
 				popUp();
 			}
@@ -293,6 +293,12 @@ public class MainActivity extends AppCompatActivity {
 		};
 		dataSet.setValueFormatter(vf);
 		dataSet.setValueTextSize(15);
+		if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
+			dataSet.setValueTextColor(Color.BLACK);
+		}
+		else {
+			dataSet.setValueTextColor(Color.WHITE);
+		}
 
 		chart.getXAxis().setTextSize(15);
 		chart.getDescription().setEnabled(false);
@@ -415,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void playAgain(View view) {
-		if (!notFound) {
+		if (!notFound || (notFound && attempt == 7)) {
 			builderC.cancel();
 			recreate();
 		}
@@ -434,6 +440,19 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu, menu);
+
+		for(int i = 0; i < menu.size(); i++){
+			Drawable drawable = menu.getItem(i).getIcon();
+			if(drawable != null) {
+				drawable.mutate();
+				if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
+					drawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+				}
+				else {
+					drawable.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+				}
+			}
+		}
 		return super.onCreateOptionsMenu(menu);
 	}
 
