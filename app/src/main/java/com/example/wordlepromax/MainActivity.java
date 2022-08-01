@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 	private ConstraintLayout layout;
 	private int letterCount = 0;
 	private int attempt = 1;
-	private ArrayList<Button> buttons = new ArrayList<>();
+	private final ArrayList<Button> buttons = new ArrayList<>();
 	private boolean notFound = true;
 	private DataHandler db;
 	private AlertDialog builderC;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		pickTheme();
-		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		Toolbar myToolbar = findViewById(R.id.my_toolbar);
 		setSupportActionBar(myToolbar);
 		db = new DataHandler(this);
 
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	public void validate(View view) throws InterruptedException {
+	public void validate(View view) {
 		attempt++;
 		if (attempt > 7) {
 			return;
@@ -421,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void playAgain(View view) {
-		if (!notFound || (notFound && attempt == 7)) {
+		if (!notFound || attempt == 7) {
 			builderC.cancel();
 			recreate();
 		}
