@@ -8,4 +8,10 @@
     <string name="currStreak">Current Streak</string>
     <string name="winPercent">Win %</string>
     <string name="stat">Statistics</string>
+  <string name="guess_distribution">Guess Distribution</string>
+    <string name="instruction">Guess the WORDLE in six tries.\n\nEach guess must be a valid five-letter word. Hit the enter button to submit.\n \nAfter each guess, the color of the tiles will change to show how close your guess was to the word.</string>
+  <string name="examples">Examples</string>
+  <string name="correct_spot">The letter D is in the word and in the correct spot.</string>
+  <string name="wrong_spot">The letter N is in the word but in the wrong spot.</string>
+  <string name="not_in_the_word">The letter B is not in the word.</string>
 </resources>
